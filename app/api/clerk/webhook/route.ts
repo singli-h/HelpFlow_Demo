@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { Webhook } from "svix"
 import { createClient } from "@supabase/supabase-js"
 
-const webhookSecret = process.env.CLERK_WEBHOOK_SECRET!
+const webhookSecret = process.env.CLERK_WEBHOOK_SECRET
+
+if (!webhookSecret) {
+  console.error("CLERK_WEBHOOK_SECRET environment variable is not set")
+}
 
 // Initialize Supabase client with service role key for admin operations
 function getSupabaseClient() {
@@ -28,6 +32,11 @@ export async function POST(req: NextRequest) {
     let evt
 
     try {
+      if (!webhookSecret) {
+        console.error("CLERK_WEBHOOK_SECRET is not configured")
+        return NextResponse.json({ error: "Webhook configuration error" }, { status: 500 })
+      }
+      
       evt = new Webhook(webhookSecret).verify(payload, headers)
     } catch (err) {
       console.error("Webhook signature verification failed:", err)

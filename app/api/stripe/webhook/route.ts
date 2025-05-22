@@ -22,7 +22,11 @@ function getSupabaseClient() {
   return createClient(supabaseUrl, serviceRoleKey)
 }
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+
+if (!webhookSecret) {
+  console.error("STRIPE_WEBHOOK_SECRET environment variable is not set")
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,6 +36,14 @@ export async function POST(req: NextRequest) {
     let event: Stripe.Event
 
     try {
+      if (!webhookSecret) {
+        console.error("STRIPE_WEBHOOK_SECRET is not configured")
+        return NextResponse.json(
+          { error: "Webhook configuration error" },
+          { status: 500 }
+        )
+      }
+      
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
     } catch (err) {
       console.error("Webhook signature verification failed:", err)

@@ -67,34 +67,58 @@ export default function Dashboard() {
     async function loadProfileAndMessages() {
       setLoading(true)
       
-      // Check if user profile exists in Supabase
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("clerk_user_id", user!.id)
-        .single()
-
-      if (error && error.code !== "PGRST116") {
-        console.error("Error loading profile:", error)
-      } else if (!data) {
-        console.log("User profile not found. It should be created by webhook.")
-        // Profile should be created by Clerk webhook
-        setProfile(null)
-      } else {
-        setProfile(data)
-        
-        // Load user's messages
-        const { data: messagesData, error: messagesError } = await supabase
-          .from("demo_messages")
+      try {
+        // Check if user profile exists in Supabase
+        const { data, error } = await supabase
+          .from("profiles")
           .select("*")
-          .eq("user_id", data.id)
-          .order("created_at", { ascending: false })
+          .eq("clerk_user_id", user!.id)
+          .maybeSingle() // Use maybeSingle instead of single to avoid throwing on no results
 
-        if (messagesError) {
-          console.error("Error loading messages:", messagesError)
+        if (error) {
+          console.error("Error loading profile:", error)
+          setProfile(null)
+        } else if (!data) {
+          console.log("User profile not found. Creating profile...")
+          // Try to create profile if it doesn't exist
+          const { data: newProfile, error: createError } = await supabase
+            .from("profiles")
+            .insert({
+              clerk_user_id: user!.id,
+              email: user!.emailAddresses[0]?.emailAddress,
+              subscription_status: "inactive",
+              subscription_plan: "free"
+            })
+            .select()
+            .single()
+
+          if (createError) {
+            console.error("Error creating profile:", createError)
+            // Profile creation failed, but continue with null profile
+            setProfile(null)
+          } else {
+            console.log("Profile created successfully:", newProfile)
+            setProfile(newProfile)
+          }
         } else {
-          setMessages(messagesData || [])
+          setProfile(data)
+          
+          // Load user's messages if profile exists
+          const { data: messagesData, error: messagesError } = await supabase
+            .from("demo_messages")
+            .select("*")
+            .eq("user_id", data.id)
+            .order("created_at", { ascending: false })
+
+          if (messagesError) {
+            console.error("Error loading messages:", messagesError)
+          } else {
+            setMessages(messagesData || [])
+          }
         }
+      } catch (error) {
+        console.error("Unexpected error loading profile:", error)
+        setProfile(null)
       }
       
       setLoading(false)
