@@ -6,10 +6,18 @@ const webhookSecret = process.env.CLERK_WEBHOOK_SECRET!
 
 // Initialize Supabase client with service role key for admin operations
 function getSupabaseClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  )
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  if (!supabaseUrl) {
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL environment variable is required")
+  }
+  
+  if (!serviceRoleKey) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY environment variable is required")
+  }
+
+  return createClient(supabaseUrl, serviceRoleKey)
 }
 
 export async function POST(req: NextRequest) {
