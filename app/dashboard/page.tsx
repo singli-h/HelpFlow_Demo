@@ -51,30 +51,18 @@ export default function Dashboard() {
   const [recipientEmail, setRecipientEmail] = useState("")
   const [messageTopic, setMessageTopic] = useState("")
 
-  // Create Supabase client with Clerk integration
-  function createClerkSupabaseClient() {
+  // Create standard Supabase client - user sync handled by webhook
+  function createSupabaseClient() {
     return createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        global: {
-          fetch: async (url, options = {}) => {
-            const token = await session?.getToken({ template: "supabase" })
-            const headers = {
-              ...options.headers,
-              ...(token && { Authorization: `Bearer ${token}` }),
-            }
-            return fetch(url, { ...options, headers })
-          },
-        },
-      }
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
   }
 
   useEffect(() => {
     if (!user || !session) return
 
-    const supabase = createClerkSupabaseClient()
+    const supabase = createSupabaseClient()
 
     async function loadProfileAndMessages() {
       setLoading(true)
@@ -89,23 +77,9 @@ export default function Dashboard() {
       if (error && error.code !== "PGRST116") {
         console.error("Error loading profile:", error)
       } else if (!data) {
-        // Create profile if it doesn't exist
-        const { data: newProfile, error: createError } = await supabase
-          .from("profiles")
-          .insert({
-            clerk_user_id: user!.id,
-            email: user!.emailAddresses[0]?.emailAddress,
-            subscription_status: "inactive",
-            subscription_plan: "free"
-          })
-          .select()
-          .single()
-
-        if (createError) {
-          console.error("Error creating profile:", createError)
-        } else {
-          setProfile(newProfile)
-        }
+        console.log("User profile not found. It should be created by webhook.")
+        // Profile should be created by Clerk webhook
+        setProfile(null)
       } else {
         setProfile(data)
         
@@ -187,7 +161,7 @@ export default function Dashboard() {
         setMessageTopic("")
         
         // Reload messages
-        const supabaseClient = createClerkSupabaseClient()
+        const supabaseClient = createSupabaseClient()
         const { data: messagesData } = await supabaseClient
           .from("demo_messages")
           .select("*")
