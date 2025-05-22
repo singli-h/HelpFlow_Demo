@@ -1,0 +1,118 @@
+<context> # Overview This product delivers a ready-to-deploy scaffold integrating Supabase, Clerk, and Stripe into a Next.js application to accelerate HelpFlow’s MVP development. :contentReference[oaicite:0]{index=0} Designed for HelpFlow’s engineering team, it provides a secure authentication flow, a payments pipeline, and database persistence out of the box, enabling focus on AI and n8n integrations. :contentReference[oaicite:1]{index=1} By leveraging existing official templates, the scaffold minimizes setup time and aligns with HelpFlow’s US business-hour remote-first environment, allowing demonstration-ready deployments on Vercel within four hours. :contentReference[oaicite:2]{index=2}
+Core Features
+Clerk Authentication: Integrates Clerk’s prebuilt UI components for login, signup, and secure session management, ensuring multi-plan user onboarding in minutes. 
+GitHub
+Clerk
+
+Supabase Database: Configures a Postgres instance with essential tables (users, sessions, payments), RLS policies for multi-tenant access, and environment variables preset via Vercel integration. 
+Vercel
+Clerk
+
+Stripe Payments: Implements Stripe Checkout and subscription management using the Subscription Starter template, providing out-of-the-box billing workflows and webhooks wiring. 
+Vercel
+Supabase
+
+Functional UI: Delivers a minimal Next.js + TailwindCSS interface showcasing authentication, a user dashboard, and a subscribe/pay button to verify end-to-end flows. 
+GitHub
+YouTube
+
+n8n OpenAI Demo: Includes a basic n8n workflow connected to OpenAI for a simple “VA task guidance” example, demonstrating AI connectivity. 
+n8n
+n8n
+
+User Experience
+User Personas: Client Admins (manage VAs, billing), Virtual Assistants (task execution), and Demo Viewers (stakeholders evaluating MVP). 
+Medium
+Reddit
+
+Key User Flows: 1) Admin signup/login → 2) Create subscription → 3) Access dashboard → 4) Trigger AI task demo via n8n. 
+YouTube
+n8n
+
+UI/UX Considerations: Employs Shadcn and Framer Motion for responsive components and animations, ensuring intuitive onboarding and visual feedback during demo interactions. 
+GitHub
+YouTube
+
+</context>
+<PRD> # Technical Architecture The system comprises a Next.js frontend, Clerk for auth, Supabase for Postgres and RLS, Stripe subscriptions via Checkout, and n8n workflows for AI calls. :contentReference[oaicite:11]{index=11} Data models include `users`, `subscriptions`, and `demo_requests` tables, each with foreign keys to link authentication and payment records. :contentReference[oaicite:12]{index=12} APIs are primarily Server Actions in Next.js, invoking Supabase and Stripe SDKs; n8n is hit via a secure webhook to demonstrate OpenAI integration. :contentReference[oaicite:13]{index=13} Infrastructure uses Vercel for frontend auto-deploys and environment management, with Supabase cloud and Stripe webhooks configured per project. :contentReference[oaicite:14]{index=14}
+Development Roadmap
+MVP Requirements
+
+Fork and deploy the Clerk-Supabase-Next.js template. 
+GitHub
+
+Configure Stripe Subscription Starter in the same project. 
+Vercel
+
+Scaffold essential Supabase tables with RLS based on Clerk user IDs. 
+Clerk
+
+Implement a simple dashboard and subscribe button in Next.js using TailwindCSS. 
+GitHub
+
+Wire up n8n workflow to OpenAI and embed via webhook demo. 
+n8n
+
+Future Enhancements
+
+Expand data schema for VA tasks and logs. 
+Vercel
+
+Deepen AI orchestration with CrewAI agents. 
+n8n
+
+Add analytics via PostHog and billing dashboards. 
+Supabase
+
+Logical Dependency Chain
+Foundation Setup: Deploy official templates for Clerk+Supabase+Next.js and Stripe. 
+GitHub
+Vercel
+
+Database & Auth Integration: Define Supabase schema and RLS policies, integrate Clerk authentication. 
+Clerk
+Vercel
+
+UI Scaffold: Build dashboard and subscription UI in Next.js. 
+GitHub
+YouTube
+
+Payment Flows: Configure Stripe checkout and webhook handlers. 
+Supabase
+
+AI Demo Integration: Connect n8n workflow to OpenAI and invoke via frontend. 
+n8n
+n8n
+
+Risks and Mitigations
+Template Compatibility: Official repos may mismatch Next.js versions; mitigate by selecting actively maintained templates. 
+GitHub
+
+Auth/Data Sync: Misalignment of Clerk and Supabase IDs; mitigate via thorough RLS policies and end-to-end testing. 
+Clerk
+
+Stripe Webhook Latency: Delays in subscription confirmation; mitigate using retry logic and optimistic UI updates. 
+Supabase
+
+n8n Security: Exposing OpenAI keys; mitigate by deploying n8n behind an API gateway or use n8n.cloud. 
+n8n
+
+Appendix
+Official Templates:
+
+Clerk Supabase Next.js: github.com/clerk/clerk-supabase-nextjs 
+GitHub
+
+Stripe Subscription Starter: vercel.com/templates/next.js/subscription-starter 
+Vercel
+
+Launch-MVP Template: github.com/ShenSeanChen/launch-mvp-stripe-nextjs-supabase 
+GitHub
+
+n8n AI Docs: n8n.io/integrations/openai 
+n8n
+
+Clerk Supabase Guide: clerk.com/docs/integrations/databases/supabase 
+Clerk
+
+</PRD>

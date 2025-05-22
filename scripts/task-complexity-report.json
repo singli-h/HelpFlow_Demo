@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "generatedAt": "2025-05-22T20:48:54.745Z",
+    "tasksAnalyzed": 10,
+    "thresholdScore": 5,
+    "projectName": "Taskmaster",
+    "usedResearch": false
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 1,
+      "taskTitle": "Setup Project Repository",
+      "complexityScore": 3,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Break down the steps for forking, cloning, and deploying the project.",
+      "reasoning": "The task involves straightforward steps that can be easily divided into subtasks."
+    },
+    {
+      "taskId": 2,
+      "taskTitle": "Configure Stripe Subscription Starter",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Detail the integration steps for Stripe and setting environment variables.",
+      "reasoning": "Integration tasks often require careful attention to detail and can benefit from being broken down."
+    },
+    {
+      "taskId": 3,
+      "taskTitle": "Setup Supabase Database",
+      "complexityScore": 6,
+      "recommendedSubtasks": 4,
+      "expansionPrompt": "Outline the steps for creating the project, defining the schema, and implementing RLS.",
+      "reasoning": "This task involves multiple components that require careful setup and configuration."
+    },
+    {
+      "taskId": 4,
+      "taskTitle": "Integrate Clerk Authentication",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "List the steps for installing the SDK, using UI components, and managing sessions.",
+      "reasoning": "While not overly complex, the integration requires multiple steps that can be clarified through subtasks."
+    },
+    {
+      "taskId": 5,
+      "taskTitle": "Build User Dashboard UI",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the design, implementation of components, and subscription button functionality.",
+      "reasoning": "Creating a UI involves design considerations and multiple components, making it more complex."
+    },
+    {
+      "taskId": 6,
+      "taskTitle": "Implement Stripe Checkout",
+      "complexityScore": 6,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Detail the steps for creating a checkout session and handling responses.",
+      "reasoning": "This task involves API interactions that require careful handling of responses and user flow."
+    },
+    {
+      "taskId": 7,
+      "taskTitle": "Wire Up n8n Workflow",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Outline the steps for setting up n8n and embedding the workflow.",
+      "reasoning": "Connecting workflows can be complex but can be broken down into manageable steps."
+    },
+    {
+      "taskId": 8,
+      "taskTitle": "Implement RLS Policies",
+      "complexityScore": 6,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Detail the creation of RLS policies for each table and testing access restrictions.",
+      "reasoning": "Defining security policies requires careful consideration and testing, justifying additional subtasks."
+    },
+    {
+      "taskId": 9,
+      "taskTitle": "Add UI/UX Enhancements",
+      "complexityScore": 4,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "List the steps for installing libraries and enhancing components.",
+      "reasoning": "While enhancements are important, they are generally less complex than core functionality tasks."
+    },
+    {
+      "taskId": 10,
+      "taskTitle": "Conduct End-to-End Testing",
+      "complexityScore": 8,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Break down the creation of test cases for each user flow and the use of testing tools.",
+      "reasoning": "End-to-end testing is complex and requires thorough coverage of multiple user interactions."
+    }
+  ]
+}
