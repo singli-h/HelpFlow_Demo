@@ -97,7 +97,7 @@ export default function Home() {
                 </div>
                 <CardTitle>Secure Authentication</CardTitle>
                 <CardDescription>
-                  Complete user management with Clerk's prebuilt components
+                  Complete user management with Clerk&apos;s prebuilt components
                 </CardDescription>
               </CardHeader>
               <CardContent>
