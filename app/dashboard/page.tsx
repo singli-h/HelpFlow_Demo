@@ -35,6 +35,10 @@ interface DemoMessage {
   recipient_email: string
   message_topic: string
   generated_message: string
+  email_subject?: string
+  sender_name?: string
+  sender_company?: string
+  plain_text_content?: string
   status: string
   sent_at: string | null
   created_at: string
@@ -180,7 +184,9 @@ export default function Dashboard() {
       const result = await response.json()
       
       if (result.success) {
-        setAiResponse(`✅ Message generated and sent to ${recipientEmail}!`)
+        const emailInfo = result.emailData
+        setAiResponse(`✅ Email "${emailInfo?.subject || 'Message'}" generated and sent to ${recipientEmail}!
+        From: ${emailInfo?.sender_name || 'AI Assistant'} (${emailInfo?.sender_company || 'HelpFlow'})`)
         setRecipientEmail("")
         setMessageTopic("")
         
@@ -414,9 +420,33 @@ export default function Dashboard() {
                       </div>
                       <div className="space-y-2">
                         <p className="text-sm"><strong>Topic:</strong> {message.message_topic}</p>
+                        {message.email_subject && (
+                          <p className="text-sm"><strong>Subject:</strong> {message.email_subject}</p>
+                        )}
+                        {message.sender_name && message.sender_company && (
+                          <p className="text-sm"><strong>From:</strong> {message.sender_name} ({message.sender_company})</p>
+                        )}
                         {message.generated_message && (
-                          <div className="bg-muted p-3 rounded text-sm">
-                            {message.generated_message}
+                          <div className="bg-muted p-3 rounded text-sm max-h-96 overflow-y-auto">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-xs font-medium text-muted-foreground">HTML Preview:</span>
+                              <button 
+                                onClick={() => {
+                                  const newWindow = window.open('', '_blank')
+                                  if (newWindow) {
+                                    newWindow.document.write(message.generated_message)
+                                    newWindow.document.close()
+                                  }
+                                }}
+                                className="text-xs text-blue-600 hover:text-blue-800"
+                              >
+                                Open Full Preview
+                              </button>
+                            </div>
+                            <div 
+                              dangerouslySetInnerHTML={{ __html: message.generated_message }}
+                              className="border rounded p-2 bg-white"
+                            />
                           </div>
                         )}
                         <p className="text-xs text-muted-foreground">
